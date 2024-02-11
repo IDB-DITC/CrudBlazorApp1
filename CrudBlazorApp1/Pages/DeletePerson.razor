@@ -1,0 +1,37 @@
+﻿@page "/delete/{id:int}"
+@inject IPersonService service
+@inject NavigationManager nav
+
+<h3>Delete Person</h3>
+<h3>Do you want to delete @person.PersonName?</h3>
+<br />
+<button @onclick="DelPerson">Delete</button>
+<button @onclick='() =>  nav.NavigateTo("/")'>Cancel</button>
+
+
+@code {
+	Person person = new Person();
+
+	[Parameter]
+	public int id { get; set; }
+
+
+	protected override void OnInitialized()
+	{
+		var result = service.GetPersonById(id);
+		if (result is null)
+			nav.NavigateTo("/");
+
+		this.person = result;
+	}
+
+
+
+	void DelPerson()
+	{
+		service.DeletePerson(person.Id);
+
+		nav.NavigateTo("/");
+	}
+
+}

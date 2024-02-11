@@ -1,0 +1,38 @@
+﻿@page "/edit/{id:int}"
+@inject IPersonService service
+@inject NavigationManager nav
+
+<h3>Edit Person</h3>
+
+<InputText @bind-Value=person.PersonName></InputText>
+<br />
+<button @onclick="Save">Save</button>
+<button @onclick='() =>  nav.NavigateTo("/")'>Cancel</button>
+
+
+@code {
+	Person person = new Person();
+
+	[Parameter]
+	public int id { get; set; }
+
+
+	protected override void OnInitialized()
+	{
+		var result = service.GetPersonById(id);
+		if (result is null)
+			nav.NavigateTo("/");
+
+		this.person = result;
+	}
+
+
+
+	void Save()
+	{
+		service.UpdatePerson(person);
+
+		nav.NavigateTo("/");
+	}
+
+}

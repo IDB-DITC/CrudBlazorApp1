@@ -1,0 +1,52 @@
+﻿@page "/"
+
+<NavLink class="nav-link" href="add">
+	Add
+</NavLink>
+
+<button @onclick="loadData">Refresh</button>
+
+
+<table class="table table-responsive table-success">
+	<tr>
+		<td>ID</td>
+		<td>Name</td>
+		<td>Command</td>
+
+	</tr>
+
+	@for (int i = 0; i < data.Count; i++)
+	{
+		<tr>
+			<td>@data[i].Id</td>
+			<td>@data[i].PersonName</td>
+			<td class="btn-group">
+				<a class="btn btn-warning nav-link" href="/edit/@data[i].Id">Edit</a>
+				<a class="btn btn-danger nav-link" href="/delete/@data[i].Id">Delete</a>
+			</td>
+		</tr>
+	}
+</table>
+
+@code {
+
+	@inject IPersonService service;
+
+
+	List<Person> data = new List<Person>();
+
+
+	protected override void OnInitialized()
+	{
+
+		loadData();
+		base.OnInitialized();
+	}
+
+
+
+	void loadData()
+	{
+		data = service.GetPerson();
+	}
+}
